@@ -1,24 +1,44 @@
+const TIPO_CLIENTE = {
+  PREMIUM: "premium",
+  GOLD: "gold",
+};
+
+const regras = {
+  [TIPO_CLIENTE.PREMIUM]: [
+    {
+      condicao: (valor, cliente) => valor > 1000 && cliente.anosCadastro > 5,
+      getValor: (valor) => valor * 0.2,
+    },
+    {
+      condicao: (valor) => valor > 1000,
+      getValor: (valor) => valor * 0.15,
+    },
+    {
+      condicao: (valor) => valor > 500,
+      getValor: (valor) => valor * 0.1,
+    },
+    {
+      condicao: (valor) => valor < 500,
+      getValor: (valor) => valor * 0.05,
+    },
+  ],
+  [TIPO_CLIENTE.GOLD]: [
+    {
+      condicao: (valor) => valor > 1000,
+      getValor: (valor) => valor * 0.1,
+    },
+    {
+      condicao: (valor) => valor < 1000,
+      getValor: (valor) => valor * 0.02,
+    },
+  ],
+};
+
 function calcularDesconto(cliente, valor) {
-  if (cliente.tipo === 'premium') {
-    if (valor > 1000) {
-      if (cliente.anosCadastro > 5) {
-        return valor * 0.20;
-      } else {
-        return valor * 0.15;
-      }
-    } else if (valor > 500) {
-      return valor * 0.10;
-    } else {
-      return valor * 0.05;
-    }
-  } else if (cliente.tipo === 'gold') {
-    if (valor > 1000) {
-      return valor * 0.10;
-    } else {
-      return valor * 0.02;
-    }
-  }
-  return 0;
+  const regrasEncontradas = regras[cliente.tipo];
+  return regrasEncontradas
+    ? regrasEncontradas.find((r) => r.condicao(valor, cliente))?.getValor(valor)
+    : 0;
 }
 
 module.exports = calcularDesconto;
