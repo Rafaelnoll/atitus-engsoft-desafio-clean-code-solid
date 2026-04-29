@@ -3,11 +3,11 @@
  */
 function encontrarProdutosComuns(listaA, listaB) {
   const comuns = [];
+  const itensRepetidos = new Set([...listaB]);
+
   for (let i = 0; i < listaA.length; i++) {
-    for (let j = 0; j < listaB.length; j++) {
-      if (listaA[i] === listaB[j]) {
-        comuns.push(listaA[i]);
-      }
+    if (itensRepetidos.has(listaA[i])) {
+      comuns.push(listaA[i]);
     }
   }
   return comuns;
